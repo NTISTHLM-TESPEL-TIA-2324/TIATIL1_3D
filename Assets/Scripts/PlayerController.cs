@@ -12,11 +12,17 @@ public class PlayerController : MonoBehaviour
 
   void Update()
   {
-    Vector3 movement = new(
-      inputVector.x,
-      0,
-      inputVector.y
-    );
+
+    Vector3 movement = Camera.main.transform.right * inputVector.x
+      + Camera.main.transform.forward * inputVector.y;
+
+    if (movement.magnitude > 0)
+    {
+      movement.y = 0;
+      movement.Normalize();
+
+      transform.forward = movement;
+    }
 
     movement = movement * speed * Time.deltaTime;
 
