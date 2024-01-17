@@ -12,6 +12,9 @@ public class LookController : MonoBehaviour
   [SerializeField]
   Vector2 sensitivity = Vector2.one;
 
+  [SerializeField]
+  float viewAngleLimit = 80;
+
   private void Awake()
   {
     head = GetComponentInChildren<Camera>().gameObject;
@@ -25,12 +28,13 @@ public class LookController : MonoBehaviour
     Vector2 lookVector = value.Get<Vector2>();
 
     // Horizontal
-    float degreesX = lookVector.x * sensitivity.x * Time.smoothDeltaTime;
-    transform.Rotate(Vector3.up, degreesX);
+    float degreesY = lookVector.x * sensitivity.x * Time.smoothDeltaTime;
+    transform.Rotate(Vector3.up, degreesY);
 
     // Vertical
-    float degreesY = -lookVector.y * sensitivity.y * Time.smoothDeltaTime;
-    xCameraRotation += degreesY;
+    float degreesX = -lookVector.y * sensitivity.y * Time.smoothDeltaTime;
+    xCameraRotation += degreesX;
+    xCameraRotation = Mathf.Clamp(xCameraRotation, -viewAngleLimit, viewAngleLimit);
     head.transform.localEulerAngles = new(xCameraRotation, 0, 0);
   }
 
