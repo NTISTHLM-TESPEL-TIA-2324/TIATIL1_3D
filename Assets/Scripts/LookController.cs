@@ -28,11 +28,11 @@ public class LookController : MonoBehaviour
     Vector2 lookVector = value.Get<Vector2>();
 
     // Horizontal
-    float degreesY = lookVector.x * sensitivity.x * Time.smoothDeltaTime;
+    float degreesY = lookVector.x * sensitivity.x;
     transform.Rotate(Vector3.up, degreesY);
 
     // Vertical
-    float degreesX = -lookVector.y * sensitivity.y * Time.smoothDeltaTime;
+    float degreesX = -lookVector.y * sensitivity.y;
     xCameraRotation += degreesX;
     xCameraRotation = Mathf.Clamp(xCameraRotation, -viewAngleLimit, viewAngleLimit);
     head.transform.localEulerAngles = new(xCameraRotation, 0, 0);

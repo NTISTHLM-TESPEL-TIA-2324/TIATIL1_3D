@@ -6,11 +6,16 @@ public class MovementController : MonoBehaviour
   [SerializeField]
   float speed = 5;
 
+  [SerializeField]
+  float jumpForce = 20;
+
+  [SerializeField]
+  float gravityMultiplier = 4;
+
   Vector2 inputVector = Vector2.zero;
   CharacterController characterController;
 
   float velocityY = 0;
-
   bool jumpPressed = false;
 
   void Awake()
@@ -29,11 +34,11 @@ public class MovementController : MonoBehaviour
       velocityY = -1f;
       if (jumpPressed)
       {
-        velocityY = 20;
+        velocityY = jumpForce;
       }
     }
 
-    velocityY += Physics.gravity.y * Time.deltaTime;
+    velocityY += Physics.gravity.y * gravityMultiplier * Time.deltaTime;
     movement.y = velocityY;
 
     characterController.Move(movement * Time.deltaTime);
