@@ -5,7 +5,6 @@ using UnityEngine;
 public class InteractionController : MonoBehaviour
 {
   GameObject cameraObject;
-
   GameObject gazeTarget;
 
   void Awake()
@@ -15,12 +14,25 @@ public class InteractionController : MonoBehaviour
 
   void Update()
   {
+    GameObject oldGazeTarget = gazeTarget;
+
+    UpdateGaze();
+    
+    if (oldGazeTarget != gazeTarget)
+    {
+      oldGazeTarget?.SendMessage("OnGazeExit", SendMessageOptions.DontRequireReceiver);
+      gazeTarget?.SendMessage("OnGazeEnter", SendMessageOptions.DontRequireReceiver);
+    }
+  }
+
+  private void UpdateGaze()
+  {
     RaycastHit hit;
     Physics.Raycast(
       cameraObject.transform.position,
       cameraObject.transform.forward,
       out hit,
-      1.5f
+      3f
     );
 
     if (hit.collider != null)
@@ -35,6 +47,12 @@ public class InteractionController : MonoBehaviour
 
   void OnFire()
   {
-    gazeTarget?.SendMessage("OnInteract");
+    if (gazeTarget != null)
+    {
+      gazeTarget.SendMessage(
+        "OnInteract",
+        SendMessageOptions.DontRequireReceiver
+      );
+    }
   }
 }
